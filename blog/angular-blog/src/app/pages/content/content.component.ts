@@ -1,5 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { dataFake} from '../../data/dataFake'
 
 @Component({
   selector: 'app-content',
@@ -9,20 +10,33 @@ import { ActivatedRoute } from '@angular/router';
 export class ContentComponent implements OnInit {
 
   @Input()
-  photoCover: string = "https://www.einerd.com.br/wp-content/uploads/2019/08/Vingadores-Ultimato-Eu-sou-o-Homem-de-Ferro-capa-890x466.jpg";
+  photoCover: string = "";
 
   @Input()
-  contentTitle: string = "MINHA NOTICIA";
+  contentTitle: string = "";
 
   @Input()
-  contentDescription: string = "ola mundo";
+  contentDescription: string = "";
+
+  private id: string | null = "0";
 
   constructor(
     private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe( value => console.log(value.get("Id")))
+    this.route.paramMap.subscribe( value => this.id = value.get("id"))
+
+    this.setValuesToComponent(this.id)
+  }
+
+  setValuesToComponent(id: string | null) {
+    const result = dataFake.filter(article => article.id == id)[0]
+
+    this.photoCover = result.photoCover
+    this.contentTitle = result.title
+    this.contentDescription = result.description
+
   }
 
 }
